@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine's Surprise</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff69b4;
+            --secondary: #ff1493;
+            --glow: 0 0 30px rgba(255, 105, 180, 0.6);
+        }
+
+        body {
+            font-family: 'Pacifico', cursive;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2.5rem;
+            border-radius: 25px;
+            box-shadow: var(--glow);
+            text-align: center;
+            max-width: 90vw;
+            transition: 0.4s ease;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            z-index: 2;
+        }
+
+        h1 {
+            color: var(--secondary);
+            font-size: 2.8rem;
+            margin: 0 0 2rem 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
+        }
+
+        .penguin-gif {
+            width: 200px;
+            margin: 20px 0;
+            filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.2));
+        }
+
+        .buttons {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            position: relative;
+            min-height: 80px;
+        }
+
+        button {
+            padding: 1.2rem 2.4rem;
+            font-size: 1.3rem;
+            border: none;
+            border-radius: 35px;
+            cursor: pointer;
+            transition: 0.3s all ease;
+            position: relative; /* تغيير من absolute إلى relative */
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.2));
+        }
+
+        #yesButton {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            z-index: 2;
+            animation: heartbeat 1.5s infinite;
+        }
+
+        #noButton {
+            background: linear-gradient(45deg, #f44336, #d32f2f);
+            color: white;
+        }
+
+        .chocolate-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 2.5em;
+            text-align: center;
+            padding: 20px;
+            z-index: 999;
+            animation: fadeIn 1s ease;
+        }
+
+        .floating-object {
+            position: fixed;
+            pointer-events: none;
+            animation: float 6s linear infinite;
+            opacity: 0;
+            z-index: 1;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            button { padding: 1rem 2rem; }
+            .penguin-gif { width: 150px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Will You Be My Valentine? 💞</h1>
+        <img src="https://media.tenor.com/2roX3uxz_68AAAAM/cute-penguin.gif" class="penguin-gif" alt="Cute Penguin">
+        <div class="buttons">
+            <button id="yesButton">Yes! Forever! 😍</button>
+            <button id="noButton">Maybe... 😅</button>
+        </div>
+    </div>
+
+    <div class="chocolate-screen" id="chocolateScreen">
+        <div>
+            Now the cowboy loves you<br>
+            and you have nothing to do with it!<br>
+            🐧🔪❤️‍🩹
+            <img src="https://i.postimg.cc/Bbytd4PS/Picsart-25-02-07-22-48-44-210-2.jpg" 
+                 style="width: 80%; max-width: 400px; margin-top: 20px; border-radius: 15px;">
+        </div>
+    </div>
+
+    <script>
+        const noButton = document.getElementById('noButton');
+        const yesButton = document.getElementById('yesButton');
+        const chocolateScreen = document.getElementById('chocolateScreen');
+        const phrases = [
+            "Nope!", "Not sure!", "Think again!", "Really?", 
+            "Please!", "I'm shy!", "Last chance!", "OKAY YES! 😘"
+        ];
+        let clickCount = 0;
+
+        // إنشاء عناصر طائرة
+        function createFlyingObjects() {
+            setInterval(() => {
+                const types = ['❤️', '🍫'];
+                const element = document.createElement('div');
+                element.className = 'floating-object';
+                element.style.left = Math.random() * 100 + 'vw';
+                element.style.animationDuration = (Math.random() * 3 + 5) + 's';
+                element.textContent = types[Math.floor(Math.random() * types.length)];
+                element.style.fontSize = Math.random() * 20 + 20 + 'px';
+                document.body.appendChild(element);
+                
+                setTimeout(() => element.remove(), 6000);
+            }, 300);
+        }
+
+        // تفعيل الزر No
+        noButton.addEventListener('click', () => {
+            clickCount = Math.min(clickCount + 1, phrases.length - 1);
+            noButton.textContent = phrases[clickCount];
+            noButton.style.transform = `scale(${1 + clickCount * 0.1})`;
+            if(clickCount === phrases.length - 1) yesButton.click();
+        });
+
+        // تفعيل الزر Yes
+        yesButton.addEventListener('click', () => {
+            document.querySelector('.container').style.opacity = '0';
+            setTimeout(() => chocolateScreen.style.display = 'flex', 500);
+        });
+
+        // بدء التشغيل
+        createFlyingObjects();
+    </script>
+</body>
+</html>
